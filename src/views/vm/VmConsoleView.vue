@@ -1,28 +1,37 @@
+<template>
+  <div v-if="isLoading">
+    Loading...
+  </div>
+  <div v-else-if="!isVmRunning">
+    Console is only available for running VMs.
+  </div>
+  <RemoteConsole v-else-if="vmConsole" :location="vmConsole.location" />
+</template>
+
 <script lang="ts" setup>
-  import VmConsole from '@/components/VmConsole.vue';
-  import { useXenApiStore } from '@/stores/xen-api.store';
-  import { computed, ref, watchEffect } from 'vue';
+  import RemoteConsole from '@/components/RemoteConsole.vue';
+  import { useConsoleStore } from '@/stores/console.store';
+  import { useVmStore } from '@/stores/vm.store';
+  import { computed } from 'vue';
   import { useRoute } from 'vue-router';
 
   const route = useRoute();
-  const xenApiStore = useXenApiStore();
-  const vmConsole = ref();
+  const vmStore = useVmStore();
+  const consoleStore = useConsoleStore();
+  consoleStore.loadAll();
 
-  const vm = computed(() => xenApiStore.vmByRef(<string>route.params.ref));
+  const isLoading = computed(() => vmStore.isLoading || consoleStore.isLoading);
 
-  watchEffect(async () => {
-    if (!vm.value) {
+  const vm = computed(() => vmStore.getRecord(<string>route.params.id));
+  const isVmRunning = computed(() => vm.value?.power_state === 'Running');
+
+  const vmConsole = computed(() => {
+    const consoleId = vm.value?.consoles[0];
+
+    if (!consoleId) {
       return;
     }
 
-    const vmConsoleRef = vm.value.consoles[0];
-
-    if (vmConsoleRef) {
-      vmConsole.value = await xenApiStore.loadConsole(vmConsoleRef);
-    }
+    return consoleStore.getRecord(consoleId);
   });
 </script>
-
-<template>
-  <VmConsole v-if="vmConsole" :location="vmConsole.location" />
-</template>

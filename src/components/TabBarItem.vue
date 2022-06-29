@@ -7,6 +7,7 @@
 <script lang="ts" setup>
   import type { RouterLinkProps } from 'vue-router';
 
+  // https://vuejs.org/api/sfc-script-setup.html#type-only-props-emit-declarations
   interface Props extends RouterLinkProps {
   }
 

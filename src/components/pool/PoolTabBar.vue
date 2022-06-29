@@ -1,18 +1,23 @@
 <template>
-  <TabBar>
-    <TabBarItem :to="{ name: 'pool.dashboard', params: { ref: 'OpaqueRef:1c3f19c8-f80a-464d-9c48-a2c19d4e4fc3' } }">Dashboard</TabBarItem>
-    <TabBarItem :to="{ name: 'pool.alarms' }">Alarms</TabBarItem>
-    <TabBarItem :to="{ name: 'pool.stats' }">Stats</TabBarItem>
-    <TabBarItem :to="{ name: 'pool.system' }">System</TabBarItem>
-    <TabBarItem :to="{ name: 'pool.network' }">Network</TabBarItem>
-    <TabBarItem :to="{ name: 'pool.storage' }">Storage</TabBarItem>
-    <TabBarItem :to="{ name: 'pool.tasks' }">Tasks</TabBarItem>
-    <TabBarItem :to="{ name: 'pool.hosts' }">Hosts</TabBarItem>
-    <TabBarItem :to="{ name: 'pool.vms' }">VMs</TabBarItem>
+  <TabBar v-if="poolId">
+    <TabBarItem :to="{ name: 'pool.dashboard', params: { id: poolId } }">Dashboard</TabBarItem>
+    <TabBarItem :to="{ name: 'pool.alarms', params: { id: poolId } }">Alarms</TabBarItem>
+    <TabBarItem :to="{ name: 'pool.stats', params: { id: poolId } }">Stats</TabBarItem>
+    <TabBarItem :to="{ name: 'pool.system', params: { id: poolId } }">System</TabBarItem>
+    <TabBarItem :to="{ name: 'pool.network', params: { id: poolId } }">Network</TabBarItem>
+    <TabBarItem :to="{ name: 'pool.storage', params: { id: poolId } }">Storage</TabBarItem>
+    <TabBarItem :to="{ name: 'pool.tasks', params: { id: poolId } }">Tasks</TabBarItem>
+    <TabBarItem :to="{ name: 'pool.hosts', params: { id: poolId } }">Hosts</TabBarItem>
+    <TabBarItem :to="{ name: 'pool.vms', params: { id: poolId } }">VMs</TabBarItem>
   </TabBar>
 </template>
 
 <script lang="ts" setup>
   import TabBar from '@/components/TabBar.vue';
   import TabBarItem from '@/components/TabBarItem.vue';
+  import { usePoolStore } from '@/stores/pool.store';
+  import { storeToRefs } from 'pinia';
+
+  const poolStore = usePoolStore();
+  const { poolId } = storeToRefs(poolStore);
 </script>

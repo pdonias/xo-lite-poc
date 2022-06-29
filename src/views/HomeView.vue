@@ -14,7 +14,7 @@
     if (pool) {
       router.push({
         name: 'pool.dashboard',
-        params: { ref: pool.$ref },
+        params: { id: pool.$ref },
       });
     }
   });

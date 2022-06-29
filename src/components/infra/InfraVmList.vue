@@ -1,22 +1,29 @@
 <template>
   <ul class="infra-vm-list">
+    <InfraLoadingItem v-if="isLoading" :icon="faDisplay" />
     <InfraVmItem
-      v-for="vm in vms"
-      :key="vm.$ref"
-      :vm-ref="vm.$ref"
+      v-for="vmId in vmIds"
+      :key="vmId"
+      :vm-id="vmId"
     />
   </ul>
 </template>
 
 <script lang="ts" setup>
+  import InfraLoadingItem from '@/components/infra/InfraLoadingItem.vue';
   import InfraVmItem from '@/components/infra/InfraVmItem.vue';
-  import { useXenApiStore } from '@/stores/xen-api.store';
+  import { useVmStore } from '@/stores/vm.store';
+  import { faDisplay } from '@fortawesome/free-solid-svg-icons';
+  import { storeToRefs } from 'pinia';
   import { computed } from 'vue';
 
   const props = defineProps<{
-    hostRef?: string
+    hostId?: string
   }>();
 
-  const xenApiStore = useXenApiStore();
-  const vms = computed(() => xenApiStore.vmsByHostRef(props.hostRef ?? 'OpaqueRef:NULL'));
+  const vmStore = useVmStore();
+  const { idsByHost, isLoading } = storeToRefs(vmStore);
+
+  vmStore.loadAll();
+  const vmIds = computed(() => idsByHost.value.get(props.hostId ?? 'OpaqueRef:NULL'));
 </script>

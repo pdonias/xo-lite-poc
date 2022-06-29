@@ -2,7 +2,7 @@
   <li class="infra-vm-item">
     <InfraItemLabel
       :icon="faDisplay"
-      :route="{ name: 'vm.console', params: { ref: vmRef} }"
+      :route="{ name: 'vm.console', params: { id: vmId } }"
     >
       {{ vm.name_label }}
       <template #actions>
@@ -15,17 +15,17 @@
 <script lang="ts" setup>
   import InfraAction from '@/components/infra/InfraAction.vue';
   import InfraItemLabel from '@/components/infra/InfraItemLabel.vue';
-  import { useXenApiStore } from '@/stores/xen-api.store';
+  import { useVmStore } from '@/stores/vm.store';
   import { faDisplay, faMoon, faPause, faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
   import { computed } from 'vue';
 
   const props = defineProps<{
-    vmRef: string
+    vmId: string
   }>();
 
-  const xenApiStore = useXenApiStore();
+  const vmStore = useVmStore();
 
-  const vm = computed(() => xenApiStore.vmByRef(props.vmRef));
+  const vm = computed(() => vmStore.getRecord(props.vmId));
 
   const powerStateIcon = computed(() => {
     switch (vm.value?.power_state) {

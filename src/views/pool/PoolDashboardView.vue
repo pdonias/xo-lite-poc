@@ -1,5 +1,5 @@
 <template>
-  <div v-if="xenApiStore.pool" class="pool-dashboard-view">
+  <div class="pool-dashboard-view">
     <PoolDashboardStatus class="item" />
 
     <AppCard style="min-width: 40rem">
@@ -22,16 +22,13 @@
   import AppTitle from '@/components/AppTitle.vue';
   import PoolDashboardStatus from '@/components/pool/dashboard/PoolDashboardStatus.vue';
   import ProgressBar from '@/components/ProgressBar.vue';
-  import { useXenApiStore } from '@/stores/xen-api.store';
-
-  const xenApiStore = useXenApiStore();
 </script>
 
 <style scoped>
   .pool-dashboard-view {
     display: flex;
-    gap: 2rem;
     padding: 2rem;
+    gap: 2rem;
   }
 
   .item {

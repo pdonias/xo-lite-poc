@@ -5,15 +5,15 @@
 <script lang="ts" setup>
   import { useXenApiStore } from '@/stores/xen-api.store';
   import VncClient from '@novnc/novnc/core/rfb';
-  import { ref, watchEffect } from 'vue';
+  import { onBeforeUnmount, ref, watchEffect } from 'vue';
 
-  const props = defineProps({
-    location: { type: String, required: true },
-  });
+  const props = defineProps<{
+    location: string
+  }>();
 
-  const vmConsoleContainer = ref<Element>();
+  const vmConsoleContainer = ref<HTMLDivElement>();
   const xenApiStore = useXenApiStore();
-  let vncClient: VncClient;
+  let vncClient: VncClient | undefined;
 
   watchEffect(() => {
     if (!vmConsoleContainer.value || !xenApiStore.currentSessionId) {
@@ -35,6 +35,10 @@
 
     vncClient.scaleViewport = true;
   });
+
+  onBeforeUnmount(() => {
+    vncClient?.disconnect()
+  })
 </script>
 
 <style scoped lang="scss">

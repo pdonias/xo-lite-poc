@@ -16,7 +16,7 @@ const router = createRouter({
     },
     pool,
     {
-      path: '/host/:ref',
+      path: '/host/:id',
       component: HostRootView,
       children: [
         {
@@ -27,7 +27,7 @@ const router = createRouter({
       ],
     },
     {
-      path: '/vm/:ref',
+      path: '/vm/:id',
       component: VmRootView,
       children: [
         {

@@ -10,7 +10,7 @@ import PoolVmsView from '@/views/pool/PoolVmsView.vue';
 import PoolRootView from '@/views/pool/PoolRootView.vue';
 
 export default {
-  path: '/pool/:ref',
+  path: '/pool/:id',
   component: PoolRootView,
   redirect: { name: 'pool.dashboard' },
   children: [

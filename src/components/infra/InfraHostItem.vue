@@ -1,9 +1,9 @@
 <template>
   <li v-if="host" class="infra-host-item">
     <InfraItemLabel
+      :current="isCurrentHost"
       :icon="faServer"
-      :route="{ name: 'host.dashboard', params: { ref: host.$ref } }"
-      :current="isExpanded || isCurrentHost"
+      :route="{ name: 'host.dashboard', params: { id: hostId } }"
     >
       {{ host.name_label }}
       <template #actions>
@@ -11,7 +11,7 @@
       </template>
     </InfraItemLabel>
 
-    <InfraVmList v-show="isExpanded" :host-ref="host.$ref" />
+    <InfraVmList v-show="isExpanded" :host-id="hostId" />
   </li>
 </template>
 
@@ -20,20 +20,21 @@
   import InfraItemLabel from '@/components/infra/InfraItemLabel.vue';
   import InfraVmList from '@/components/infra/InfraVmList.vue';
   import useToggle from '@/composables/useToggle';
+  import { useHostStore } from '@/stores/host.store';
   import { useUiStore } from '@/stores/ui.store';
-  import { useXenApiStore } from '@/stores/xen-api.store';
   import { faAngleDown, faAngleUp, faServer } from '@fortawesome/free-solid-svg-icons';
   import { computed } from 'vue';
 
   const props = defineProps<{
-    hostRef: string
+    hostId: string
   }>();
 
-  const xenApiStore = useXenApiStore();
+  const hostStore = useHostStore();
+  const host = computed(() => hostStore.getRecord(props.hostId));
+
   const uiStore = useUiStore();
 
-  const host = computed(() => xenApiStore.hostByRef(props.hostRef));
-  const isCurrentHost = computed(() => props.hostRef === uiStore.currentHostRef);
+  const isCurrentHost = computed(() => props.hostId === uiStore.currentHostId);
   const { isActive: isExpanded, toggle } = useToggle();
 </script>
 
@@ -42,6 +43,7 @@
   :deep(.link) {
     padding-left: 3rem;
   }
+
   .infra-vm-list:deep(.link) {
     padding-left: 4.5rem;
   }

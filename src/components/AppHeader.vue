@@ -1,17 +1,17 @@
 <template>
   <header class="app-header">
     <RouterLink :to="{ name: 'home' }">
-      <img src="../assets/logo.png" alt="XO Lite" style="width: 8rem" />
+      <img alt="XO Lite" src="../assets/logo.png" style="width: 8rem" />
     </RouterLink>
     <slot />
-    <span @click="toggleTheme" style="cursor:pointer;">Switch theme</span>
+    <span style="cursor:pointer;" @click="toggleTheme">Switch theme</span>
   </header>
 </template>
 
 <script lang="ts" setup>
-const toggleTheme = () => {
-  document.body.classList.toggle('dark');
-}
+  const toggleTheme = () => {
+    document.body.classList.toggle('dark');
+  };
 </script>
 
 <style scoped>

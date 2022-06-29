@@ -1,16 +1,23 @@
 <template>
   <ul class="infra-host-list">
-    <InfraHostItem
-      v-for="host in xenApiStore.hosts"
-      :key="host.$ref"
-      :host-ref="host.$ref"
-    />
+    <li v-if="isLoading">Chargement des hosts en cours...</li>
+    <template v-else>
+      <InfraHostItem
+        v-for="id in ids"
+        :key="id"
+        :host-id="id"
+      />
+    </template>
   </ul>
 </template>
 
 <script lang="ts" setup>
   import InfraHostItem from '@/components/infra/InfraHostItem.vue';
-  import { useXenApiStore } from '@/stores/xen-api.store';
+  import { useHostStore } from '@/stores/host.store';
+  import { storeToRefs } from 'pinia';
 
-  const xenApiStore = useXenApiStore();
+  const hostStore = useHostStore();
+  const { ids, isLoading } = storeToRefs(hostStore);
+
+  hostStore.loadAll();
 </script>

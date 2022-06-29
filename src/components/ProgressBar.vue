@@ -7,10 +7,14 @@
 <script lang="ts" setup>
   import { computed } from 'vue';
 
-  const props = defineProps({
-    value: { type: Number, required: true },
-    maxValue: { type: Number, default: 100 },
-  });
+  interface Props {
+    value: number
+    maxValue?: number
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    maxValue: 100
+  })
 
   const progressWithUnit = computed(() => {
     const progress = Math.round((props.value / props.maxValue) * 100);

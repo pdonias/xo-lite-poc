@@ -1,10 +1,63 @@
-import type { JSONRPCParams } from 'json-rpc-2.0';
 import { JSONRPCClient } from 'json-rpc-2.0';
 
-export type ObjectType = 'pool' | 'host' | 'VM' | 'host_metrics';
+export type ObjectType =
+  'Bond'
+  | 'Certificate'
+  | 'Cluster'
+  | 'Cluster_host'
+  | 'DR_task'
+  | 'Feature'
+  | 'GPU_group'
+  | 'PBD'
+  | 'PCI'
+  | 'PGPU'
+  | 'PIF'
+  | 'PIF_metrics'
+  | 'PUSB'
+  | 'PVS_cache_storage'
+  | 'PVS_proxy'
+  | 'PVS_server'
+  | 'PVS_site'
+  | 'SDN_controller'
+  | 'SM'
+  | 'SR'
+  | 'USB_group'
+  | 'VBD'
+  | 'VBD_metrics'
+  | 'VDI'
+  | 'VGPU'
+  | 'VGPU_type'
+  | 'VIF'
+  | 'VIF_metrics'
+  | 'VLAN'
+  | 'VM'
+  | 'VMPP'
+  | 'VMSS'
+  | 'VM_appliance'
+  | 'VM_guest_metrics'
+  | 'VM_metrics'
+  | 'VUSB'
+  | 'blob'
+  | 'console'
+  | 'crashdump'
+  | 'host'
+  | 'host_cpu'
+  | 'host_crashdump'
+  | 'host_metrics'
+  | 'host_patch'
+  | 'network'
+  | 'network_sriov'
+  | 'pool'
+  | 'pool_patch'
+  | 'pool_update'
+  | 'role'
+  | 'secret'
+  | 'subject'
+  | 'task'
+  | 'tunnel'
 
 interface XenApiObject {
-  $ref: string;
+
 }
 
 type WithLabel<T> = T & {
@@ -18,6 +71,7 @@ export interface XenApiPool extends XenApiObject {
 export interface XenApiHost extends XenApiObject {
   name_label: string;
   metrics: string;
+  resident_VMs: string[];
 }
 
 export interface XenApiVm extends XenApiObject {
@@ -41,13 +95,25 @@ export interface XenApiHostMetric extends XenApiObject {
   memory_total: number;
 }
 
+type WatchCallbackResult = {
+  id: string
+  class: string
+  operation: 'add' | 'mod' | 'del'
+  ref: string
+  snapshot: object
+}
+
+type WatchCallbackResults = WatchCallbackResult[]
+
+type WatchCallback = (results: WatchCallbackResults) => void
+
 export default class XenApi {
   #client: JSONRPCClient;
   #sessionId: string | undefined;
 
   #types: string[] = [];
 
-  #watchCallBack: ((results: any) => void) | undefined;
+  #watchCallBack: WatchCallback | undefined;
   #watching = false;
   #fromToken: string | undefined;
 
@@ -68,8 +134,8 @@ export default class XenApi {
   }
 
   async connect(login: string, password: string) {
-    this.#sessionId = await this.call('session.login_with_password', [login, password]);
-    this.#types = (await this.call<string[]>('system.listMethods'))
+    this.#sessionId = await this.#call('session.login_with_password', [login, password]);
+    this.#types = (await this.#call<string[]>('system.listMethods'))
       .filter((method: string) => method.endsWith('.get_all_records'))
       .map((method: string) => method.slice(0, method.indexOf('.')))
       .filter((type: string) => type !== 'message');
@@ -81,76 +147,13 @@ export default class XenApi {
     return this.#sessionId;
   }
 
-  async loadAll() {
-    console.log('will load all ');
-    const collections = await Promise.all(this.#types.map(
-      async type => {
-        try {
-          const collection = await this.call(`${type}.get_all_records`, [this.sessionId]);
-          return { type, collection };
-        } catch (error: any) {
-          if (error?.message === 'MESSAGE_REMOVED') {
-            return { type, collection: {} };
-          }
-          throw error;
-        }
-      }),
-    );
-    console.log({ collections });
-    const res: { [key: string]: any } = {};
-    collections.forEach(({ type, collection }) => {
-      res[type] = collection;
-    });
-    console.log({ res });
-    return res;
-  }
-
-  // https://xapi-project.github.io/xen-api/classes/vm.html
-  call<T = any>(method: string, args: JSONRPCParams = [this.sessionId]): PromiseLike<T> {
+  #call<T = any>(method: string, args: any[] = []): PromiseLike<T> {
     return this.#client.request(method, args);
   }
 
-  async #loadCollection<T extends object>(type: ObjectType) {
-    const result = await this.call(`${type}.get_all_records`, [this.sessionId]);
-
-    return new Map(
-      Object
-        .entries<Omit<WithLabel<XenApiObject>, '$ref'>>(result)
-        .sort(([, obj1], [, obj2]) => {
-          const label1 = obj1.name_label?.toLocaleLowerCase();
-          const label2 = obj2.name_label?.toLocaleLowerCase();
-
-          switch (true) {
-            case label1 < label2:
-              return -1;
-            case label1 > label2:
-              return 1;
-            default:
-              return 0;
-          }
-        })
-        .map(([ref, obj]) => [ref, { $ref: ref, ...obj }]),
-    ) as Map<string, T>;
-  }
-
-  loadPools() {
-    return this.#loadCollection<XenApiPool>('pool');
-  }
-
-  loadHosts() {
-    return this.#loadCollection<XenApiHost>('host');
-  }
-
-  loadVms() {
-    return this.#loadCollection<XenApiVm>('VM');
-  }
-
-  loadHostsMetrics() {
-    return this.#loadCollection<XenApiHostMetric>('host_metrics');
-  }
-
-  loadConsole(ref: string) {
-    return this.call<XenApiConsole>(`console.get_record`, [this.sessionId, ref]);
+  async loadRecords<T>(type: ObjectType): Promise<Map<string, T>> {
+    const result = await this.#call(`${type}.get_all_records`, [this.sessionId]);
+    return new Map(Object.entries<T>(result));
   }
 
   async #watch() {
@@ -163,7 +166,7 @@ export default class XenApi {
         // no callback , skip this call
         await new Promise(resolve => setTimeout(resolve, 500));
       }
-      const result: { token: string, events: any } = await this.call(
+      const result: { token: string, events: any } = await this.#call(
         'event.from',
         [
           this.sessionId,
@@ -189,11 +192,11 @@ export default class XenApi {
     this.#watching = false;
   }
 
-  registerWatchCallBack(callback: () => void) {
+  registerWatchCallBack(callback: WatchCallback) {
     this.#watchCallBack = callback;
   }
 
   async injectWatchEvent(poolRef: string) {
-    this.#fromToken = await this.call('event.inject', [this.sessionId, 'pool', poolRef]);
+    this.#fromToken = await this.#call('event.inject', [this.sessionId, 'pool', poolRef]);
   }
 }
