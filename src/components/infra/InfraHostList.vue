@@ -18,6 +18,4 @@
 
   const hostStore = useHostStore();
   const { ids, isLoading } = storeToRefs(hostStore);
-
-  hostStore.loadAll();
 </script>

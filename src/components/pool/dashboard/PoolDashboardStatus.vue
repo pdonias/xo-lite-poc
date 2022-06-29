@@ -1,17 +1,19 @@
 <template>
   <AppCard>
     <AppTitle type="h4">Status</AppTitle>
-    <PoolDashboardStatusItem
-      :active="activeHostsCount"
-      :total="totalHostsCount"
-      label="Hosts"
-    />
-    <AppSeparator />
-    <PoolDashboardStatusItem
-      :active="activeVmsCount"
-      :total="totalVmsCount"
-      label="VMs"
-    />
+    <template v-if="isReady">
+      <PoolDashboardStatusItem
+        :active="activeHostsCount"
+        :total="totalHostsCount"
+        label="Hosts"
+      />
+      <AppSeparator />
+      <PoolDashboardStatusItem
+        :active="activeVmsCount"
+        :total="totalVmsCount"
+        label="VMs"
+      />
+    </template>
   </AppCard>
 </template>
 
@@ -26,7 +28,8 @@
 
   const vmStore = useVmStore();
   const hostMetrics = useHostMetricsStore();
-  hostMetrics.loadAll();
+
+  const isReady = computed(() => vmStore.isReady && hostMetrics.isReady);
 
   const totalHostsCount = computed(() => hostMetrics.ids.length);
   const activeHostsCount = computed(() => {

@@ -1,7 +1,7 @@
 <template>
   <ul class="infra-pool-list">
     <InfraLoadingItem v-if="isLoading" :icon="faBuilding" />
-    <li v-else-if="poolId" class="infra-pool-item">
+    <li v-else-if="isReady" class="infra-pool-item">
       <InfraItemLabel
         :icon="faBuilding"
         :route="{ name: 'pool.dashboard', params: { id: poolId } }"
@@ -27,9 +27,7 @@
   import { storeToRefs } from 'pinia';
 
   const poolStore = usePoolStore();
-  const { pool, poolId, isLoading } = storeToRefs(poolStore);
-
-  poolStore.load();
+  const { pool, poolId, isLoading, isReady } = storeToRefs(poolStore);
 </script>
 
 <style scoped>

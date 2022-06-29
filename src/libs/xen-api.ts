@@ -97,7 +97,7 @@ export interface XenApiHostMetric extends XenApiObject {
 
 type WatchCallbackResult = {
   id: string
-  class: string
+  class: Lowercase<ObjectType>
   operation: 'add' | 'mod' | 'del'
   ref: string
   snapshot: object

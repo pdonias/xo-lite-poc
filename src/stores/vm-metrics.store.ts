@@ -1,6 +1,7 @@
-import { setupXapiCollection } from '@/stores/index';
+import { createXenApiCollectionStoreContext } from '@/stores/index';
 import { defineStore } from 'pinia';
 
-export const useVmMetricsStore = defineStore('vm-metrics', () => {
-  return setupXapiCollection('VM_metrics')
-})
+export const useVmMetricsStore = defineStore(
+  'vm-metrics',
+  () => createXenApiCollectionStoreContext('VM_metrics'),
+);

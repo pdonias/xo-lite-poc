@@ -16,6 +16,11 @@
 <script lang="ts" setup>
   import AppHeader from '@/components/AppHeader.vue';
   import InfraPoolList from '@/components/infra/InfraPoolList.vue';
+  import { useXenApiStore } from '@/stores/xen-api.store';
+
+  const xenApiStore = useXenApiStore();
+  xenApiStore.init();
+
 </script>
 
 <style>

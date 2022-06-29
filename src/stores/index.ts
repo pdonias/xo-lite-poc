@@ -7,10 +7,12 @@ type Options<T> = {
   sort?: (entry1: T, entry2: T) => 1 | 0 | -1
 }
 
-export function setupXapiCollection<T>(objectType: ObjectType, options: Options<T> = {}) {
+export function createXenApiCollectionStoreContext<T>(objectType: ObjectType, options: Options<T> = {}) {
+  let isInitialized = false;
+
   const records = ref<Map<string, T>>(new Map());
   const isLoading = ref(false);
-  const isLoaded = ref(false);
+  const isReady = ref(false);
 
   const ids = computed<string[]>(() => {
     let ids: string[] = Array.from(records.value.keys());
@@ -28,24 +30,27 @@ export function setupXapiCollection<T>(objectType: ObjectType, options: Options<
 
   const getRecord = (id: string) => records.value.get(id);
 
-  async function loadAll() {
-    if (isLoaded.value) {
+  async function init() {
+    if (isInitialized) {
       return;
     }
 
-    isLoaded.value = true;
+    isInitialized = true;
+
     isLoading.value = true;
 
     const xenApiStore = useXenApiStore();
     const xapi = await xenApiStore.getXapi();
     records.value = await xapi.loadRecords<T>(objectType);
     isLoading.value = false;
+    isReady.value = true;
   }
 
   return {
+    init,
     ids,
     getRecord,
     isLoading,
-    loadAll,
+    isReady,
   };
 }

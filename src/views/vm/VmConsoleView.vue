@@ -18,7 +18,6 @@
   const route = useRoute();
   const vmStore = useVmStore();
   const consoleStore = useConsoleStore();
-  consoleStore.loadAll();
 
   const isLoading = computed(() => vmStore.isLoading || consoleStore.isLoading);
 

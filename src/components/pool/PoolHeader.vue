@@ -12,5 +12,5 @@
   import { computed } from 'vue';
 
   const poolStore = usePoolStore();
-  const name = computed(() => poolStore.pool?.name_label);
+  const name = computed(() => poolStore.pool?.name_label ?? '...');
 </script>

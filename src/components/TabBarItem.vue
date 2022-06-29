@@ -1,5 +1,8 @@
 <template>
-  <RouterLink class="tab-bar-item" v-bind="$props">
+  <span v-if="disabled" class="tab-bar-item disabled">
+    <slot />
+  </span>
+  <RouterLink v-else class="tab-bar-item" v-bind="$props">
     <slot />
   </RouterLink>
 </template>
@@ -9,6 +12,7 @@
 
   // https://vuejs.org/api/sfc-script-setup.html#type-only-props-emit-declarations
   interface Props extends RouterLinkProps {
+    disabled?: boolean
   }
 
   defineProps<Props>();
@@ -26,12 +30,12 @@
     color: var(--color-blue-scale-100);
     border-bottom: 2px solid transparent;
 
-    &:hover {
+    &:hover:not(.disabled) {
       border-bottom-color: var(--color-extra-blue-base);
       background-color: var(--background-color-secondary);
     }
 
-    &:active {
+    &:active:not(.disabled) {
       color: var(--color-extra-blue-base);
       border-bottom-color: var(--color-extra-blue-base);
       background-color: var(--background-color-secondary);
@@ -41,6 +45,10 @@
       color: var(--color-extra-blue-base);
       border-bottom-color: var(--color-extra-blue-base);
       background-color: var(--background-color-primary);
+    }
+
+    &.disabled {
+      color: var(--color-blue-scale-400);
     }
   }
 </style>

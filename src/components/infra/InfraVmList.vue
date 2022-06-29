@@ -24,6 +24,5 @@
   const vmStore = useVmStore();
   const { idsByHost, isLoading } = storeToRefs(vmStore);
 
-  vmStore.loadAll();
   const vmIds = computed(() => idsByHost.value.get(props.hostId ?? 'OpaqueRef:NULL'));
 </script>
