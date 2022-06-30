@@ -3,18 +3,18 @@
 </template>
 
 <script lang="ts" setup>
-  import { useXenApiStore } from '@/stores/xen-api.store';
-  import { watch } from 'vue';
+  import { usePoolStore } from '@/stores/pool.store';
+  import { watchEffect } from 'vue';
   import { useRouter } from 'vue-router';
 
   const router = useRouter();
-  const xenApiStore = useXenApiStore();
+  const poolStore = usePoolStore();
 
-  watch(() => xenApiStore.pool, (pool) => {
-    if (pool) {
+  watchEffect(() => {
+    if (poolStore.poolId) {
       router.push({
         name: 'pool.dashboard',
-        params: { id: pool.$ref },
+        params: { id: poolStore.poolId },
       });
     }
   });
