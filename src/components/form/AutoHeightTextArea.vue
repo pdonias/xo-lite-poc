@@ -3,7 +3,7 @@
     ref="textArea"
     :value="modelValue"
     class="auto-height-textarea"
-    @input="emit('update:modelValue', $event.target.value)"
+    @input="handleInput"
   />
 </template>
 
@@ -17,6 +17,10 @@
   const emit = defineEmits<{
     (event: 'update:modelValue', value: string): void
   }>();
+
+  const handleInput = (event: InputEvent) => {
+    emit('update:modelValue', (<HTMLTextAreaElement>event.target).value);
+  };
 
   const textArea = ref<HTMLTextAreaElement>();
 
