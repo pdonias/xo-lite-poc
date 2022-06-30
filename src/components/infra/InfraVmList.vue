@@ -1,6 +1,8 @@
 <template>
   <ul class="infra-vm-list">
-    <InfraLoadingItem v-if="isLoading" :icon="faDisplay" />
+    <template v-if="isLoading">
+      <InfraLoadingItem v-for="_ in 3" :icon="faDisplay" />
+    </template>
     <InfraVmItem
       v-for="vmId in vmIds"
       :key="vmId"

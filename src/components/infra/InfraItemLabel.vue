@@ -59,11 +59,11 @@
     display: flex;
     align-items: center;
     flex: 1;
+    min-width: 0;
     padding-left: 1.5rem;
     text-decoration: none;
     color: inherit;
     gap: 1rem;
-    min-width: 0;
   }
 
   .text {
@@ -72,8 +72,8 @@
     text-overflow: ellipsis;
   }
 
-    .actions {
-      display: flex;
-      align-items: center;
-    }
+  .actions {
+    display: flex;
+    align-items: center;
+  }
 </style>
