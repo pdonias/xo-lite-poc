@@ -1,6 +1,7 @@
 <template>
-  <li class="infra-vm-item">
+  <li ref="rootElement" class="infra-vm-item">
     <InfraItemLabel
+      v-if="isVisible"
       :icon="faDisplay"
       :route="{ name: 'vm.console', params: { id: vmId } }"
     >
@@ -17,11 +18,22 @@
   import InfraItemLabel from '@/components/infra/InfraItemLabel.vue';
   import { useVmStore } from '@/stores/vm.store';
   import { faDisplay, faMoon, faPause, faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
-  import { computed } from 'vue';
+  import { useIntersectionObserver } from '@vueuse/core';
+  import { computed, ref } from 'vue';
 
   const props = defineProps<{
     vmId: string
   }>();
+
+  const rootElement = ref();
+  const isVisible = ref(false);
+
+  const { stop } = useIntersectionObserver(rootElement, ([entry]) => {
+    if (entry.isIntersecting) {
+      isVisible.value = true;
+      stop();
+    }
+  });
 
   const vmStore = useVmStore();
 
@@ -44,6 +56,10 @@
 </script>
 
 <style scoped>
+  .infra-vm-item {
+    height: 6rem;
+  }
+
   .infra-action {
     color: var(--color-extra-blue-d60);
 
