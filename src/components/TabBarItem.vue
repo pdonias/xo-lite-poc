@@ -18,7 +18,7 @@
   defineProps<Props>();
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
   .tab-bar-item {
     font-size: 2rem;
     font-weight: 600;

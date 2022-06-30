@@ -10,7 +10,7 @@
   }>();
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
   .app-title {
     line-height: 150%;
     align-self: stretch;

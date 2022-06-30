@@ -39,8 +39,8 @@
 </script>
 
 
-<style lang="scss" scoped>
-  :deep(.link) {
+<style scoped>
+  .infra-host-item:deep(.link) {
     padding-left: 3rem;
   }
 

@@ -18,7 +18,7 @@
   }>();
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
   .title-bar {
     display: flex;
     align-items: center;

@@ -1,5 +1,5 @@
 <template>
-  <RouterLink v-slot="{ isActive, href, navigate }" :to="route" class="infra-item-label" custom>
+  <RouterLink v-slot="{ isActive, href, navigate }" :to="route" custom>
     <div :class="{ current: isActive || $props.current }" class="infra-item-label" v-bind="$attrs">
       <a :href="href" class="link" @click="navigate">
         <FontAwesomeIcon :icon="icon" class="icon" />
@@ -25,7 +25,7 @@
   }>();
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
   .infra-item-label {
     display: flex;
     align-items: stretch;

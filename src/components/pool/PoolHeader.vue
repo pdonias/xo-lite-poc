@@ -4,10 +4,9 @@
   </TitleBar>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
   import TitleBar from '@/components/TitleBar.vue';
   import { usePoolStore } from '@/stores/pool.store';
-  import { useXenApiStore } from '@/stores/xen-api.store';
   import { faBuilding } from '@fortawesome/free-regular-svg-icons';
   import { computed } from 'vue';
 

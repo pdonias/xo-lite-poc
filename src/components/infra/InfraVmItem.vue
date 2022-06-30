@@ -43,7 +43,7 @@
   const powerStateClass = computed(() => vm.value?.power_state.toLocaleLowerCase());
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
   .infra-action {
     color: var(--color-extra-blue-d60);
 

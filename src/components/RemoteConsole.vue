@@ -41,11 +41,11 @@
   })
 </script>
 
-<style scoped lang="scss">
+<style scoped>
   .vm-console {
     height: 80rem;
 
-    &:deep(> div) {
+    & > :deep(div) {
       background-color: transparent !important;
     }
   }
