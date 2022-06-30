@@ -12,10 +12,12 @@ import { ref } from 'vue';
 export const useXenApiStore = defineStore('xen-api', () => {
   const xenApi = new XenApi(import.meta.env.VITE_XO_HOST);
   const currentSessionId = ref();
+  const isConnected = ref(false)
+  const isConnecting = ref(false) 
 
   async function getXapi() {
     if (!currentSessionId.value) {
-      currentSessionId.value = await xenApi.connect(import.meta.env.VITE_XO_USERNAME, import.meta.env.VITE_XO_PASSWORD);
+      throw new Error('Not connected to xapi')
     }
 
     return xenApi;
@@ -46,7 +48,18 @@ export const useXenApiStore = defineStore('xen-api', () => {
     consoleStore.init();
   }
 
+  async function connect(login:string, password:string){
+    isConnecting.value = true
+    currentSessionId.value = await xenApi.connect(login, password);
+    isConnected.value = true
+    isConnecting.value = false
+    console.log('connected',currentSessionId.value)
+  }
+
   return {
+    isConnected,
+    isConnecting,
+    connect,
     init,
     getXapi,
     currentSessionId,

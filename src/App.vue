@@ -1,8 +1,11 @@
 <template>
-  <div>
+  <div v-if="!xenApiStore.isConnected" style="display: flex">
+    <Login/>
+  </div>
+  <div v-else="xenApiStore.isConnected">
     <AppHeader />
-
-    <div style="display: flex">
+    
+    <div v-if="xenApiStore.isConnected" style="display: flex">
       <nav class="nav">
         <InfraPoolList />
       </nav>
@@ -16,10 +19,10 @@
 <script lang="ts" setup>
   import AppHeader from '@/components/AppHeader.vue';
   import InfraPoolList from '@/components/infra/InfraPoolList.vue';
+  import Login from '@/components/login.vue';
   import { useXenApiStore } from '@/stores/xen-api.store';
 
   const xenApiStore = useXenApiStore();
-  xenApiStore.init();
 
 </script>
 
