@@ -13,7 +13,7 @@
   const uiStore = useUiStore();
 
   watchEffect(() => {
-    const vm = vmStore.getRecord(<string>route.params.id);
-    uiStore.currentHostId = vm?.resident_on;
+    const vm = vmStore.getRecord(<string>route.params.uuid);
+    uiStore.currentHostOpaqueRef = vm?.resident_on;
   });
 </script>

@@ -3,7 +3,7 @@
     <InfraItemLabel
       v-if="isVisible"
       :icon="faDisplay"
-      :route="{ name: 'vm.console', params: { id: vmId } }"
+      :route="{ name: 'vm.console', params: { uuid: vm.uuid } }"
     >
       {{ vm.name_label }}
       <template #actions>
@@ -22,7 +22,7 @@
   import { computed, ref } from 'vue';
 
   const props = defineProps<{
-    vmId: string
+    vmOpaqueRef: string
   }>();
 
   const rootElement = ref();
@@ -37,7 +37,7 @@
 
   const vmStore = useVmStore();
 
-  const vm = computed(() => vmStore.getRecord(props.vmId));
+  const vm = computed(() => vmStore.getRecord(props.vmOpaqueRef));
 
   const powerStateIcon = computed(() => {
     switch (vm.value?.power_state) {

@@ -11,10 +11,10 @@
   const poolStore = usePoolStore();
 
   watchEffect(() => {
-    if (poolStore.poolId) {
+    if (poolStore.pool) {
       router.push({
         name: 'pool.dashboard',
-        params: { id: poolStore.poolId },
+        params: { uuid: poolStore.pool.uuid },
       });
     }
   });

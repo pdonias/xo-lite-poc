@@ -1,14 +1,14 @@
 <template>
   <TabBar>
-    <TabBarItem :disabled="!isReady" :to="{ name: 'pool.dashboard', params: { id: poolId } }">Dashboard</TabBarItem>
-    <TabBarItem :disabled="!isReady" :to="{ name: 'pool.alarms', params: { id: poolId } }">Alarms</TabBarItem>
-    <TabBarItem :disabled="!isReady" :to="{ name: 'pool.stats', params: { id: poolId } }">Stats</TabBarItem>
-    <TabBarItem :disabled="!isReady" :to="{ name: 'pool.system', params: { id: poolId } }">System</TabBarItem>
-    <TabBarItem :disabled="!isReady" :to="{ name: 'pool.network', params: { id: poolId } }">Network</TabBarItem>
-    <TabBarItem :disabled="!isReady" :to="{ name: 'pool.storage', params: { id: poolId } }">Storage</TabBarItem>
-    <TabBarItem :disabled="!isReady" :to="{ name: 'pool.tasks', params: { id: poolId } }">Tasks</TabBarItem>
-    <TabBarItem :disabled="!isReady" :to="{ name: 'pool.hosts', params: { id: poolId } }">Hosts</TabBarItem>
-    <TabBarItem :disabled="!isReady" :to="{ name: 'pool.vms', params: { id: poolId } }">VMs</TabBarItem>
+    <TabBarItem :disabled="!isReady" :to="{ name: 'pool.dashboard', params: { uuid: poolUuid } }">Dashboard</TabBarItem>
+    <TabBarItem :disabled="!isReady" :to="{ name: 'pool.alarms', params: { uuid: poolUuid } }">Alarms</TabBarItem>
+    <TabBarItem :disabled="!isReady" :to="{ name: 'pool.stats', params: { uuid: poolUuid } }">Stats</TabBarItem>
+    <TabBarItem :disabled="!isReady" :to="{ name: 'pool.system', params: { uuid: poolUuid } }">System</TabBarItem>
+    <TabBarItem :disabled="!isReady" :to="{ name: 'pool.network', params: { uuid: poolUuid } }">Network</TabBarItem>
+    <TabBarItem :disabled="!isReady" :to="{ name: 'pool.storage', params: { uuid: poolUuid } }">Storage</TabBarItem>
+    <TabBarItem :disabled="!isReady" :to="{ name: 'pool.tasks', params: { uuid: poolUuid } }">Tasks</TabBarItem>
+    <TabBarItem :disabled="!isReady" :to="{ name: 'pool.hosts', params: { uuid: poolUuid } }">Hosts</TabBarItem>
+    <TabBarItem :disabled="!isReady" :to="{ name: 'pool.vms', params: { uuid: poolUuid } }">VMs</TabBarItem>
   </TabBar>
 </template>
 
@@ -17,7 +17,9 @@
   import TabBarItem from '@/components/TabBarItem.vue';
   import { usePoolStore } from '@/stores/pool.store';
   import { storeToRefs } from 'pinia';
+  import { computed } from 'vue';
 
   const poolStore = usePoolStore();
-  const { poolId, isReady } = storeToRefs(poolStore);
+  const { pool, isReady } = storeToRefs(poolStore);
+  const poolUuid = computed(() => pool.value?.uuid);
 </script>

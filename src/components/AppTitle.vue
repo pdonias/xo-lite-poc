@@ -1,13 +1,23 @@
 <template>
-  <component :is="type" :class="type" class="app-title">
+  <component :is="tag" :class="type" class="app-title">
     <slot />
   </component>
 </template>
 
 <script lang="ts" setup>
-  defineProps<{
+  import { computed } from 'vue';
+
+  const props = defineProps<{
     type: 'display' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
   }>();
+
+  const tag = computed(() => {
+    if (props.type === 'display') {
+      return 'h1';
+    }
+
+    return props.type;
+  })
 </script>
 
 <style scoped>

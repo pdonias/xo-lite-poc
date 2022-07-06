@@ -3,7 +3,7 @@
     <InfraItemLabel
       :current="isCurrentHost"
       :icon="faServer"
-      :route="{ name: 'host.dashboard', params: { id: hostId } }"
+      :route="{ name: 'host.dashboard', params: { uuid: host.uuid } }"
     >
       {{ host.name_label }}
       <template #actions>
@@ -11,7 +11,7 @@
       </template>
     </InfraItemLabel>
 
-    <InfraVmList v-show="isExpanded" :host-id="hostId" />
+    <InfraVmList v-show="isExpanded" :host-opaque-ref="hostOpaqueRef" />
   </li>
 </template>
 
@@ -26,15 +26,15 @@
   import { computed } from 'vue';
 
   const props = defineProps<{
-    hostId: string
+    hostOpaqueRef: string
   }>();
 
   const hostStore = useHostStore();
-  const host = computed(() => hostStore.getRecord(props.hostId));
+  const host = computed(() => hostStore.getRecord(props.hostOpaqueRef));
 
   const uiStore = useUiStore();
 
-  const isCurrentHost = computed(() => props.hostId === uiStore.currentHostId);
+  const isCurrentHost = computed(() => props.hostOpaqueRef === uiStore.currentHostOpaqueRef);
   const { isActive: isExpanded, toggle } = useToggle();
 </script>
 

@@ -27,19 +27,19 @@
   import { computed } from 'vue';
 
   const vmStore = useVmStore();
-  const hostMetrics = useHostMetricsStore();
+  const hostMetricsStore = useHostMetricsStore();
 
-  const isReady = computed(() => vmStore.isReady && hostMetrics.isReady);
+  const isReady = computed(() => vmStore.isReady && hostMetricsStore.isReady);
 
-  const totalHostsCount = computed(() => hostMetrics.ids.length);
+  const totalHostsCount = computed(() => hostMetricsStore.opaqueRefs.length);
   const activeHostsCount = computed(() => {
-    return hostMetrics.ids.filter(id => hostMetrics.getRecord(id)?.live).length;
+    return hostMetricsStore.opaqueRefs.filter(opaqueRef => hostMetricsStore.getRecord(opaqueRef)?.live).length;
   });
 
-  const totalVmsCount = computed(() => vmStore.ids.length);
+  const totalVmsCount = computed(() => vmStore.opaqueRefs.length);
   const activeVmsCount = computed(() => {
-    return vmStore.ids
-      .filter(vmId => vmStore.getRecord(vmId)!.power_state === 'Running')
+    return vmStore.opaqueRefs
+      .filter(opaqueRef => vmStore.getRecord(opaqueRef)!.power_state === 'Running')
       .length;
   });
 </script>

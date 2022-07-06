@@ -1,11 +1,11 @@
 import { sortRecordsByNameLabel } from '@/libs/utils';
 import type { XenApiVm } from '@/libs/xen-api';
-import { createXenApiCollectionStoreContext } from '@/stores/index';
+import { createRecordContext } from '@/stores/index';
 import { defineStore } from 'pinia';
 import { computed } from 'vue';
 
 export const useVmStore = defineStore('vm', () => {
-  const baseContext = createXenApiCollectionStoreContext<XenApiVm>(
+  const baseVmContext = createRecordContext<XenApiVm>(
     'VM',
     {
       filter: (vm) => !vm.is_a_snapshot && !vm.is_a_template && !vm.is_control_domain,
@@ -13,24 +13,24 @@ export const useVmStore = defineStore('vm', () => {
     },
   );
 
-  const idsByHost = computed(() => {
-    const collection = new Map<string, string[]>();
+  const opaqueRefsByHostRef = computed(() => {
+    const vmsOpaqueRefsByHostOpaqueRef = new Map<string, string[]>();
 
-    baseContext.ids.value.forEach((id) => {
-      const vm = baseContext.getRecord(id)!;
+    baseVmContext.opaqueRefs.value.forEach((opaqueRef) => {
+      const vm = baseVmContext.getRecord(opaqueRef)!;
 
-      if (!collection.has(vm.resident_on)) {
-        collection.set(vm.resident_on, []);
+      if (!vmsOpaqueRefsByHostOpaqueRef.has(vm.resident_on)) {
+        vmsOpaqueRefsByHostOpaqueRef.set(vm.resident_on, []);
       }
 
-      collection.get(vm.resident_on)!.push(id);
+      vmsOpaqueRefsByHostOpaqueRef.get(vm.resident_on)!.push(opaqueRef);
     });
 
-    return collection;
+    return vmsOpaqueRefsByHostOpaqueRef;
   });
 
   return {
-    ...baseContext,
-    idsByHost,
+    ...baseVmContext,
+    opaqueRefsByHostRef,
   };
 });

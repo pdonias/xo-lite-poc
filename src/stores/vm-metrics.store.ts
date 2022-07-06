@@ -1,7 +1,8 @@
-import { createXenApiCollectionStoreContext } from '@/stores/index';
+import type { XenApiVmMetrics } from '@/libs/xen-api';
+import { createRecordContext } from '@/stores/index';
 import { defineStore } from 'pinia';
 
 export const useVmMetricsStore = defineStore(
   'vm-metrics',
-  () => createXenApiCollectionStoreContext('VM_metrics'),
+  () => createRecordContext<XenApiVmMetrics>('VM_metrics'),
 );

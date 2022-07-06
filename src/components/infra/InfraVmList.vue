@@ -1,12 +1,12 @@
 <template>
   <ul class="infra-vm-list">
-    <template v-if="isLoading">
+    <template v-if="!isReady">
       <InfraLoadingItem v-for="_ in 3" :icon="faDisplay" />
     </template>
     <InfraVmItem
-      v-for="vmId in vmIds"
-      :key="vmId"
-      :vm-id="vmId"
+      v-for="vmOpaqueRef in vmOpaqueRefs"
+      :key="vmOpaqueRef"
+      :vm-opaque-ref="vmOpaqueRef"
     />
   </ul>
 </template>
@@ -20,11 +20,11 @@
   import { computed } from 'vue';
 
   const props = defineProps<{
-    hostId?: string
+    hostOpaqueRef?: string
   }>();
 
   const vmStore = useVmStore();
-  const { idsByHost, isLoading } = storeToRefs(vmStore);
+  const { opaqueRefsByHostRef, isReady } = storeToRefs(vmStore);
 
-  const vmIds = computed(() => idsByHost.value.get(props.hostId ?? 'OpaqueRef:NULL'));
+  const vmOpaqueRefs = computed(() => opaqueRefsByHostRef.value.get(props.hostOpaqueRef ?? 'OpaqueRef:NULL'));
 </script>

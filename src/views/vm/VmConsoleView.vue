@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isLoading">
+  <div v-if="!isReady">
     Loading...
   </div>
   <div v-else-if="!isVmRunning">
@@ -12,25 +12,25 @@
   import RemoteConsole from '@/components/RemoteConsole.vue';
   import { useConsoleStore } from '@/stores/console.store';
   import { useVmStore } from '@/stores/vm.store';
-  import { computed } from 'vue';
+  import { computed, watchEffect } from 'vue';
   import { useRoute } from 'vue-router';
 
   const route = useRoute();
   const vmStore = useVmStore();
   const consoleStore = useConsoleStore();
 
-  const isLoading = computed(() => vmStore.isLoading || consoleStore.isLoading);
+  const isReady = computed(() => vmStore.isReady || consoleStore.isReady);
 
-  const vm = computed(() => vmStore.getRecord(<string>route.params.id));
+  const vm = computed(() => vmStore.getRecordByUuid(<string>route.params.uuid));
   const isVmRunning = computed(() => vm.value?.power_state === 'Running');
 
   const vmConsole = computed(() => {
-    const consoleId = vm.value?.consoles[0];
+    const consoleOpaqueRef = vm.value?.consoles[0];
 
-    if (!consoleId) {
+    if (!consoleOpaqueRef) {
       return;
     }
 
-    return consoleStore.getRecord(consoleId);
+    return consoleStore.getRecord(consoleOpaqueRef);
   });
 </script>
