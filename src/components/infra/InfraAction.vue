@@ -15,7 +15,7 @@
   }>();
 </script>
 
-<style scoped>
+<style lang="postcss" scoped>
   .infra-action {
     display: flex;
     align-items: center;

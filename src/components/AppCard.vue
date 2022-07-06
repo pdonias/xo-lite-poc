@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<style scoped>
+<style lang="postcss" scoped>
   .app-card {
     padding: 2.1rem;
     border-radius: 0.8rem;

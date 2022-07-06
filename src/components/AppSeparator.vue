@@ -2,7 +2,7 @@
   <hr class="app-separator" />
 </template>
 
-<style scoped>
+<style lang="postcss" scoped>
   .app-separator {
     border: none;
     border-top: 1px solid var(--color-blue-scale-400);

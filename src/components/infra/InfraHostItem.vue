@@ -39,7 +39,7 @@
 </script>
 
 
-<style scoped>
+<style lang="postcss" scoped>
   .infra-host-item:deep(.link) {
     padding-left: 3rem;
   }

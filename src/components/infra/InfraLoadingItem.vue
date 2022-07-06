@@ -17,7 +17,7 @@
   }>();
 </script>
 
-<style scoped>
+<style lang="postcss" scoped>
   .infra-item-label-placeholder {
     display: flex;
     height: 6rem;

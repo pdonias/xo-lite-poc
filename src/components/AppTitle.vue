@@ -20,7 +20,7 @@
   })
 </script>
 
-<style scoped>
+<style lang="postcss" scoped>
   .app-title {
     line-height: 150%;
     align-self: stretch;

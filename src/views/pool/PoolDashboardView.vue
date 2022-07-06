@@ -24,7 +24,7 @@
   import ProgressBar from '@/components/ProgressBar.vue';
 </script>
 
-<style scoped>
+<style lang="postcss" scoped>
   .pool-dashboard-view {
     display: flex;
     padding: 2rem;

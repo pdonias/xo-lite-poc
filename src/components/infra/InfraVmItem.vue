@@ -55,7 +55,7 @@
   const powerStateClass = computed(() => vm.value?.power_state.toLocaleLowerCase());
 </script>
 
-<style scoped>
+<style lang="postcss" scoped>
   .infra-vm-item {
     height: 6rem;
   }

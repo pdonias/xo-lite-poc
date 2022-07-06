@@ -35,7 +35,7 @@
   });
 </script>
 
-<style scoped>
+<style lang="postcss" scoped>
   .progress-circle-fill {
     animation: progress 1s ease-out forwards;
     fill: none;

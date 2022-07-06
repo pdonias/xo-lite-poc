@@ -14,7 +14,7 @@
   };
 </script>
 
-<style scoped>
+<style lang="postcss" scoped>
   .app-header {
     display: flex;
     align-items: center;

@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<style scoped>
+<style lang="postcss" scoped>
   .tab-bar {
     display: flex;
     align-items: stretch;

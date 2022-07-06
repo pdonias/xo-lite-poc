@@ -30,7 +30,7 @@
   const { pool, isReady } = storeToRefs(poolStore);
 </script>
 
-<style scoped>
+<style lang="postcss" scoped>
   .infra-pool-list {
     font-size: 1.6rem;
     font-weight: 500;

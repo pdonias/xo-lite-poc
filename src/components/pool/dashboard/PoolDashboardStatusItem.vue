@@ -34,7 +34,7 @@
   const inactive = computed(() => props.total - props.active);
 </script>
 
-<style scoped>
+<style lang="postcss" scoped>
   .pool-dashboard-status-item {
     display: flex;
     gap: 3.4rem;

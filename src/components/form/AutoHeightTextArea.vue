@@ -33,7 +33,7 @@
   onUpdated(resize);
 </script>
 
-<style scoped>
+<style lang="postcss" scoped>
   .auto-height-textarea {
     min-height: 5rem;
     resize: none;

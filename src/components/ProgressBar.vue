@@ -22,7 +22,7 @@
   });
 </script>
 
-<style scoped>
+<style lang="postcss" scoped>
   .progress-bar {
     overflow: hidden;
     height: 1.2rem;

@@ -23,7 +23,7 @@
 
 </script>
 
-<style>
+<style lang="postcss">
   @import '@/assets/base.css';
 
   .nav {

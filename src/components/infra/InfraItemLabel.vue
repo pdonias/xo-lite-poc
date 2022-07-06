@@ -25,7 +25,7 @@
   }>();
 </script>
 
-<style scoped>
+<style lang="postcss" scoped>
   .infra-item-label {
     display: flex;
     align-items: stretch;

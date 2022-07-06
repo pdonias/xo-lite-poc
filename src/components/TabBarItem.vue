@@ -18,7 +18,7 @@
   defineProps<Props>();
 </script>
 
-<style scoped>
+<style lang="postcss" scoped>
   .tab-bar-item {
     font-size: 2rem;
     font-weight: 600;

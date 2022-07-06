@@ -18,7 +18,7 @@
   }>();
 </script>
 
-<style scoped>
+<style lang="postcss" scoped>
   .title-bar {
     display: flex;
     align-items: center;
