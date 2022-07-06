@@ -1,11 +1,11 @@
 <template>
   <ul class="infra-host-list">
-    <li v-if="isLoading">Chargement des hosts en cours...</li>
+    <li v-if="!isReady">Chargement des hosts en cours...</li>
     <template v-else>
       <InfraHostItem
-        v-for="id in ids"
-        :key="id"
-        :host-id="id"
+        v-for="opaqueRef in opaqueRefs"
+        :key="opaqueRef"
+        :host-opaque-ref="opaqueRef"
       />
     </template>
   </ul>
@@ -17,5 +17,5 @@
   import { storeToRefs } from 'pinia';
 
   const hostStore = useHostStore();
-  const { ids, isLoading } = storeToRefs(hostStore);
+  const { opaqueRefs, isReady } = storeToRefs(hostStore);
 </script>

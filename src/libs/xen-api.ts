@@ -56,25 +56,21 @@ export type ObjectType =
   | 'task'
   | 'tunnel'
 
-interface XenApiObject {
-
+export type XenApiRecord = {
+  uuid: string
 }
 
-type WithLabel<T> = T & {
+export interface XenApiPool extends XenApiRecord {
   name_label: string;
 }
 
-export interface XenApiPool extends XenApiObject {
-  name_label: string;
-}
-
-export interface XenApiHost extends XenApiObject {
+export interface XenApiHost extends XenApiRecord {
   name_label: string;
   metrics: string;
   resident_VMs: string[];
 }
 
-export interface XenApiVm extends XenApiObject {
+export interface XenApiVm extends XenApiRecord {
   name_label: string;
   power_state: 'Running' | 'Paused' | 'Halted' | 'Suspended';
   resident_on: string;
@@ -84,15 +80,23 @@ export interface XenApiVm extends XenApiObject {
   is_a_template: boolean;
 }
 
-export interface XenApiConsole extends XenApiObject {
+export interface XenApiConsole extends XenApiRecord {
   protocol: string;
   location: string;
 }
 
-export interface XenApiHostMetric extends XenApiObject {
+export interface XenApiHostMetrics extends XenApiRecord {
   live: boolean;
   memory_free: number;
   memory_total: number;
+}
+
+export interface XenApiVmMetrics extends XenApiRecord {
+
+}
+
+export interface XenApiVmGuestMetrics extends XenApiRecord {
+
 }
 
 type WatchCallbackResult = {
@@ -151,7 +155,7 @@ export default class XenApi {
     return this.#client.request(method, args);
   }
 
-  async loadRecords<T>(type: ObjectType): Promise<Map<string, T>> {
+  async loadRecords<T extends XenApiRecord>(type: ObjectType): Promise<Map<string, T>> {
     const result = await this.#call(`${type}.get_all_records`, [this.sessionId]);
     return new Map(Object.entries<T>(result));
   }

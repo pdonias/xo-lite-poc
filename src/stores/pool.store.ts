@@ -1,25 +1,23 @@
 import type { XenApiPool } from '@/libs/xen-api';
-import { createXenApiCollectionStoreContext } from '@/stores/index';
+import { createRecordContext } from '@/stores/index';
 import { defineStore } from 'pinia';
 import { computed } from 'vue';
 
 export const usePoolStore = defineStore('pool', () => {
   const {
     init,
-    ids,
+    opaqueRefs,
     getRecord,
-    isLoading,
     isReady,
-  } = createXenApiCollectionStoreContext<XenApiPool>('pool');
+  } = createRecordContext<XenApiPool>('pool');
 
-  const poolId = computed(() => ids.value[0]);
-  const pool = computed(() => getRecord(poolId.value));
+  const poolOpaqueRef = computed(() => opaqueRefs.value[0]);
+  const pool = computed(() => getRecord(poolOpaqueRef.value));
 
   return {
     init,
     pool,
-    poolId,
-    isLoading,
+    poolOpaqueRef,
     isReady,
   };
 });

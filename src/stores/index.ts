@@ -1,34 +1,15 @@
-import type { ObjectType } from '@/libs/xen-api';
-import { useXenApiStore } from '@/stores/xen-api.store';
+import type { ObjectType, XenApiRecord } from '@/libs/xen-api';
+import { useRecordsStore } from '@/stores/records.store';
 import { computed, ref } from 'vue';
 
-type Options<T> = {
-  filter?: (entry: T) => boolean
-  sort?: (entry1: T, entry2: T) => 1 | 0 | -1
+type Options<T extends XenApiRecord> = {
+  filter?: (record: T) => boolean
+  sort?: (record1: T, record2: T) => 1 | 0 | -1
 }
 
-export function createXenApiCollectionStoreContext<T>(objectType: ObjectType, options: Options<T> = {}) {
+export function createRecordContext<T extends XenApiRecord>(objectType: ObjectType, options: Options<T> = {}) {
   let isInitialized = false;
-
-  const records = ref<Map<string, T>>(new Map());
-  const isLoading = ref(false);
   const isReady = ref(false);
-
-  const ids = computed<string[]>(() => {
-    let ids: string[] = Array.from(records.value.keys());
-
-    if (options.sort) {
-      ids = ids.sort((id1, id2) => options.sort!(records.value.get(id1)!, records.value.get(id2)!));
-    }
-
-    if (options.filter) {
-      ids = ids.filter((id) => options.filter!(records.value.get(id)!));
-    }
-
-    return ids;
-  });
-
-  const getRecord = (id: string) => records.value.get(id);
 
   async function init() {
     if (isInitialized) {
@@ -37,20 +18,44 @@ export function createXenApiCollectionStoreContext<T>(objectType: ObjectType, op
 
     isInitialized = true;
 
-    isLoading.value = true;
+    const xapiRecordsStore = useRecordsStore();
+    await xapiRecordsStore.loadRecords(objectType);
 
-    const xenApiStore = useXenApiStore();
-    const xapi = await xenApiStore.getXapi();
-    records.value = await xapi.loadRecords<T>(objectType);
-    isLoading.value = false;
     isReady.value = true;
+  }
+
+  const opaqueRefs = computed<string[]>(() => {
+    const xapiRecordsStore = useRecordsStore();
+    let opaqueRefs: string[] = Array.from(xapiRecordsStore.getRecordsOpaqueRefs(objectType.toLocaleLowerCase() as Lowercase<ObjectType>));
+
+    if (options.filter) {
+      opaqueRefs = opaqueRefs.filter((opaqueRef) => options.filter!(xapiRecordsStore.getRecord(opaqueRef)!));
+    }
+
+    if (options.sort) {
+      opaqueRefs = opaqueRefs.sort((opaqueRef1, opaqueRef2) => {
+        return options.sort!(xapiRecordsStore.getRecord(opaqueRef1)!, xapiRecordsStore.getRecord(opaqueRef2)!);
+      });
+    }
+
+    return opaqueRefs;
+  });
+
+  function getRecord(opaqueRef: string) {
+    const xapiRecordsStore = useRecordsStore();
+    return xapiRecordsStore.getRecord<T>(opaqueRef);
+  }
+
+  function getRecordByUuid(uuid: string) {
+    const xapiRecordsStore = useRecordsStore();
+    return xapiRecordsStore.getRecordByUuid<T>(uuid);
   }
 
   return {
     init,
-    ids,
+    opaqueRefs,
     getRecord,
-    isLoading,
+    getRecordByUuid,
     isReady,
   };
 }

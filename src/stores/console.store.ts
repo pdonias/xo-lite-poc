@@ -1,7 +1,8 @@
-import { createXenApiCollectionStoreContext } from '@/stores/index';
+import type { XenApiConsole } from '@/libs/xen-api';
+import { createRecordContext } from '@/stores/index';
 import { defineStore } from 'pinia';
 
 export const useConsoleStore = defineStore(
   'console',
-  () => createXenApiCollectionStoreContext('console'),
+  () => createRecordContext<XenApiConsole>('console'),
 );

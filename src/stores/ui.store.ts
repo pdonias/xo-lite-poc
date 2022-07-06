@@ -2,9 +2,9 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
 export const useUiStore = defineStore('ui', () => {
-  const currentHostId = ref();
+  const currentHostOpaqueRef = ref();
 
   return {
-    currentHostId,
+    currentHostOpaqueRef,
   };
 });

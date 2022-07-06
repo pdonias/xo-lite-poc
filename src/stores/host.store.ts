@@ -1,8 +1,9 @@
 import { sortRecordsByNameLabel } from '@/libs/utils';
-import { createXenApiCollectionStoreContext } from '@/stores/index';
+import type { XenApiHost } from '@/libs/xen-api';
+import { createRecordContext } from '@/stores/index';
 import { defineStore } from 'pinia';
 
 export const useHostStore = defineStore(
   'host',
-  () => createXenApiCollectionStoreContext('host', { sort: sortRecordsByNameLabel }),
+  () => createRecordContext<XenApiHost>('host', { sort: sortRecordsByNameLabel }),
 );
